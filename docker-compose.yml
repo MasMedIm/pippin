@@ -18,6 +18,9 @@ services:
 
   backend:
     build: ./backend
+    # Mount backend source for hot-reload during development
+    volumes:
+      - ./backend:/app
     environment:
       DB_USER: postgres
       DB_PASSWORD: postgres
@@ -32,15 +35,23 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    # Run Uvicorn with --reload to auto-restart on code changes
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"
     networks:
       - pippin-net
 
   frontend:
-    build: ./frontend
+    image: node:20-slim
+    working_dir: /app
+    # Mount frontend source for hot-reload in development
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - backend
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     ports:
       - "5173:5173"
     networks:
