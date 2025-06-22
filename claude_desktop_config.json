@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "opentrons-lab-agent": {
+      "command": "C:\\Users\\ahsan\\Documents\\aiLabAutoHack\\.venv\\Scripts\\python.exe",
+      "args": ["C:\\Users\\ahsan\\Documents\\aiLabAutoHack\\opentrons_mcp.py"],
+      "cwd": "C:\\Users\\ahsan\\Documents\\aiLabAutoHack"
+    }
+  }
+}
