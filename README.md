@@ -1,6 +1,8 @@
 # pippin – AI Assistant for Opentrons FLEX
 
-![Pippin UI Preview](frontend/src/assets/main-image.png)
+<p align="center">
+  <img src="frontend/src/assets/main-image.png" alt="Pippin UI Preview" width="400" />
+</p>
 
 Pippin is an AI-powered assistant designed to simplify the use of the Opentrons FLEX robotic platform. It provides a user-friendly interface for managing protocols, runs, and robot settings, leveraging OpenAI's capabilities to enhance user experience.
 This project is built with a modern tech stack including FastAPI, React, and Docker, ensuring a robust and scalable solution for laboratory automation.
@@ -10,7 +12,6 @@ This project is built with a modern tech stack including FastAPI, React, and Doc
 ### Prerequisites
 
 Ensure you have the following installed:
-- Git: https://git-scm.com/downloads
 - Docker: https://docs.docker.com/get-docker/
 - Docker Compose: https://docs.docker.com/compose/install/
 
@@ -53,6 +54,10 @@ For full endpoint details, see `backend/instructions.txt`. Key endpoints include
   - Create Run: `POST /runs` – `{ "data": { "protocolId": "<id>" } }`
   - Control Run: `POST /runs/{runId}/actions` – `{ "data": { "actionType": "<play|pause|stop>" } }`
   - List Commands: `GET /runs/{runId}/commands`
+
+## Additional Resources
+
+For more detailed information on the Opentrons FLEX device and its capabilities, please visit the [Opentrons Knowledge Hub](https://opentrons.com/resources/knowledge-hub).
 
 ## License
 
