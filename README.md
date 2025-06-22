@@ -1,5 +1,7 @@
 # pippin – AI Assistant for Opentrons FLEX
 
+![Pippin UI Preview](frontend/src/assets/main-image.png)
+
 Pippin is an AI-powered assistant designed to simplify the use of the Opentrons FLEX robotic platform. It provides a user-friendly interface for managing protocols, runs, and robot settings, leveraging OpenAI's capabilities to enhance user experience.
 This project is built with a modern tech stack including FastAPI, React, and Docker, ensuring a robust and scalable solution for laboratory automation.
 
