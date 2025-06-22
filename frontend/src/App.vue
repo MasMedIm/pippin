@@ -5,7 +5,7 @@
     </div>
     <div class="app-main">
       <div class="card realtime-demo">
-        <h2>Realtime Demo</h2>
+        
         <div class="button-group">
           <button
             class="btn btn-primary"
@@ -23,7 +23,7 @@
           </button>
         </div>
         <div class="function-calls">
-          <h3>Function Calls</h3>
+          <h3>Opentrons FLEX Calls</h3>
           <ul>
             <li v-for="(call, idx) in functionCalls" :key="idx">
               <strong>{{ call.name }}</strong>: {{ JSON.stringify(call.arguments) }}
@@ -132,11 +132,11 @@ const functionCalls = computed(() =>
   cursor: not-allowed;
 }
 .btn-primary {
-  background-color: #4f46e5;
+  background-color: #2B9C94;
   color: #fff;
 }
 .btn-primary:hover:not(:disabled) {
-  background-color: #4338ca;
+  background-color: #309C8F;
 }
 .btn-secondary {
   background-color: #e5e7eb;

@@ -52,3 +52,7 @@ For full endpoint details, see `backend/instructions.txt`. Key endpoints include
   - Control Run: `POST /runs/{runId}/actions` – `{ "data": { "actionType": "<play|pause|stop>" } }`
   - List Commands: `GET /runs/{runId}/commands`
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
