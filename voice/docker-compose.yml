@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: pippindb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 5
+    networks:
+      - pippin-net
+
+  backend:
+    build: ./backend
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: pippindb
+      # Read from host env at runtime.  You can `export OPENAI_API_KEY=sk-...` before running
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      JWT_SECRET_KEY: "development-secret-key"
+      # Optional: Base URL for external REST API calls (used by function-calling)
+      EXTERNAL_API_BASE_URL: ${EXTERNAL_API_BASE_URL}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    networks:
+      - pippin-net
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    networks:
+      - pippin-net
+
+volumes:
+  pgdata:
+
+networks:
+  pippin-net:
+    driver: bridge
