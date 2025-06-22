@@ -1,5 +1,5 @@
 """Maps LLM function-call events to actual CRUD operations."""
-
+from .mcp_client import MCPClient
 from __future__ import annotations
 
 from datetime import date
@@ -27,25 +27,25 @@ def _parse_date(val: str | None) -> date | None:
 
 
 def handle_function_call(name: str, args: dict[str, Any], *, db: Session) -> Any:
-    """Dispatch an LLM function call to the appropriate CRUD helper.
-
-    Parameters
-    ----------
-    name: str
-        Name of the function (as emitted by the LLM)
-    args: dict
-        Arguments payload.
-    db: Session
-    user: User
-
-    Returns
-    -------
-    Any – typically a SQLAlchemy model instance.
-    """
-
+    """Dispatch an LLM function call to MCP server or other handlers."""
     
-    # Extend with more operations here ...
-    if name == "external_api_call":
+    if name == "mcp_call":
+        tool_name = args.get("tool_name")
+        tool_args = args.get("arguments", {})
+        
+        if not tool_name:
+            raise FunctionCallError("tool_name is required for mcp_call")
+        
+        # Initialize MCP client
+        mcp_client = MCPClient()
+        
+        # Call the MCP tool
+        result = mcp_client.call_tool(tool_name, tool_args)
+        
+        return {"tool": tool_name, "result": result}
+    
+    # Keep external_api_call as fallback if needed
+    elif name == "external_api_call":
         endpoint = args.get("endpoint")
         method = args.get("method", "GET").upper()
         body = args.get("body") or {}
