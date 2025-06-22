@@ -9,6 +9,8 @@ import { fetchEphemeralSession } from "../lib/api.js";
 export function useRealtime() {
   const status = ref("idle"); // idle | connecting | live | error
   const messages = ref([]); // raw events from data-channel
+  // activity state: 'none' | 'user' | 'assistant'
+  const activity = ref('none');
   const pcRef = ref(null);
   const dcRef = ref(null);
 
@@ -49,7 +51,17 @@ export function useRealtime() {
         let parsed;
         try {
           parsed = JSON.parse(e.data);
-          messages.value.push(parsed);
+        messages.value.push(parsed);
+        // Update speaking activity based on realtime events
+        if (parsed.type === 'input_audio_buffer.speech_started') {
+          activity.value = 'user';
+        } else if (parsed.type === 'input_audio_buffer.speech_stopped') {
+          activity.value = 'none';
+        } else if (parsed.type === 'output_audio_buffer.started') {
+          activity.value = 'assistant';
+        } else if (parsed.type === 'output_audio_buffer.stopped') {
+          activity.value = 'none';
+        }
           console.log('[RTC_PARSED]', parsed);
         } catch (_) {
           messages.value.push(e.data);
@@ -147,5 +159,5 @@ export function useRealtime() {
     status.value = "idle";
   }
 
-  return { status, messages, connect, disconnect };
+  return { status, messages, activity, connect, disconnect };
 }

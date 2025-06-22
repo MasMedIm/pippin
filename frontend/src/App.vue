@@ -10,12 +10,12 @@
           <button
             class="btn btn-primary"
             @click="onConnect"
-            :disabled="rtc.status === 'connecting' || rtc.status === 'live'"
+            :disabled="status === 'connecting' || status === 'live'"
           >
-            {{ rtc.status === 'live' ? 'Connected' : 'Connect' }}
+            {{ btnLabel }}
           </button>
           <button
-            v-if="rtc.status === 'live'"
+            v-if="status === 'live'"
             class="btn btn-secondary"
             @click="onDisconnect"
           >
@@ -40,23 +40,36 @@ import { computed } from "vue";
 import { useRealtime } from "./composables/useRealtime.js";
 import mainImage from "./assets/main-image.png";
 
-// WebRTC hook
-const rtc = useRealtime();
+// WebRTC hook: destructure status, messages, activity and controls
+const { status, messages, activity, connect, disconnect } = useRealtime();
 
 function onConnect() {
-  rtc.connect();
+  connect();
 }
 
 function onDisconnect() {
-  rtc.disconnect();
+  disconnect();
 }
 
 // Show only completed function_call events
 const functionCalls = computed(() =>
-  Array.isArray(rtc.messages?.value)
-    ? rtc.messages.value.filter((m) => m.name)
+  Array.isArray(messages.value)
+    ? messages.value.filter((m) => m.name)
     : []
 );
+
+// Button label based on connection and speaking state
+const btnLabel = computed(() => {
+  if (status.value === 'idle') return 'Connect';
+  if (status.value === 'connecting') return 'Connecting…';
+  if (status.value === 'error') return 'Error – Retry';
+  if (status.value === 'live') {
+    if (activity.value === 'user') return 'Listening…';
+    if (activity.value === 'assistant') return 'Assistant speaking…';
+    return 'Connected';
+  }
+  return 'Connect';
+});
 </script>
 
 <style scoped>
