@@ -64,30 +64,26 @@ def _load_instructions() -> str | None:
 _CACHED_INSTRUCTIONS: Optional[str] = _load_instructions()
 
 # Tool definitions exposed to the model for function-calling
+# Replace the TOOLS list with:
 TOOLS: List[Dict[str, Any]] = [
-        {
-        "name": "external_api_call",
-        "description": "Make an HTTP request to the Opentrons FLEX API.",
+    {
+        "name": "mcp_call",
+        "description": "Execute an OpenTrons operation via MCP server. Can handle both simple API calls and complex workflows like protocol optimization.",
         "type": "function",
         "parameters": {
             "type": "object",
             "properties": {
-                "endpoint": {
+                "tool_name": {
                     "type": "string",
-                    "description": "API endpoint path (e.g. /x/y/z)."
+                    "description": "MCP tool to call (e.g., 'get_robot_health', 'create_tartrazine_assay_protocol', 'run_parameter_optimization_experiment')"
                 },
-                "method": {
-                    "type": "string",
-                    "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-                    "description": "HTTP method to use."
-                },
-                "body": {
+                "arguments": {
                     "type": "object",
-                    "description": "Request body for POST/PUT/PATCH.",
-                    "nullable": "true"
+                    "description": "Arguments to pass to the MCP tool",
+                    "nullable": True
                 }
             },
-            "required": ["endpoint", "method"]
+            "required": ["tool_name"]
         }
     }
 ]
